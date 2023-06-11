@@ -1,8 +1,37 @@
+/* eslint-disable react/jsx-key */
 // import React from "react";
 import { EditOutlined, DeleteOutlined, FileTextOutlined, UserOutlined, AntDesignOutlined} from '@ant-design/icons';
-import {Avatar, Tooltip, Card} from 'antd';
+import {Avatar, Tooltip, Card,Popconfirm,Modal} from 'antd';
 const { Meta } = Card;
-const TrelloItem = () => {
+const TrelloItem = ({openDialog}) => {
+
+  const info = () => {
+    Modal.info({
+      title: 'Card Detail',
+      content: (
+        <div>
+          <div>
+            <h4>Title</h4>
+            <div>This is title</div>
+          </div>
+          <div>
+            <h4>Description</h4>
+            <div>This is description</div>
+          </div>
+          <div>
+            <h4>Member</h4>
+            <div>...</div>
+          </div>
+          <div>
+            <h4>Status</h4>
+            <div>New</div>
+          </div>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
+
   return (
     <>
     <Card
@@ -14,9 +43,26 @@ const TrelloItem = () => {
         />
       }
       actions={[
-        <FileTextOutlined key="view" />,
-        <EditOutlined key="edit" />,
-        <DeleteOutlined key="ellipsis" />,
+        <Tooltip placement='top' title='View'>
+          <FileTextOutlined key='view' onClick={info}/>
+        </Tooltip>,
+        <Tooltip placement='top' title='Edit'>
+          <EditOutlined key='edit' onClick={()=>openDialog(true)}/>
+        </Tooltip>,
+        
+        <Popconfirm
+          placement="top"
+          title="Delete the list"
+          description="Are you sure to delete this list?"
+          onConfirm={confirm}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Tooltip placement='top' title='Delete'>
+            <DeleteOutlined key='delete' />
+          </Tooltip>
+        </Popconfirm>
+        
       ]}
     >
       <Meta style={{padding: 10}}
@@ -24,6 +70,7 @@ const TrelloItem = () => {
         description="This is the description"
       />
         <Avatar.Group
+        className='avatarGroup'
           maxCount={2}
           maxPopoverTrigger="click"
           size="large"
@@ -31,8 +78,7 @@ const TrelloItem = () => {
             color: '#f56a00',
             backgroundColor: '#fde3cf',
             cursor: 'pointer',
-            display: 'flex',
-            justifyContent: 'flex-end'
+            display: 'flex'
           }}
         >
           <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
